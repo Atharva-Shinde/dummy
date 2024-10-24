@@ -11,6 +11,8 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Generate changelog
         run: |
           make changelog
@@ -38,9 +40,9 @@ jobs:
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
               --notes-file changelog.md
-      # - name: Upload Artifact
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     tag: ${{ github.ref_name }}
-      #   run: |
-      #     gh release upload dummy-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
+      - name: Upload Artifact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+        run: |
+          gh release upload dummy-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
