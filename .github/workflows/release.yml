@@ -23,11 +23,11 @@ jobs:
       - name: Verify S2I Binary
         run: |
           s2i version
-      # - name: Build Application
-      #   run: |
-      #     docker login quay.io --username=atshinde --password ${{ secrets.PASSWORD }}
-      #     s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image matrices
-      #     docker push quay.io/atshinde/matrix-image
+      - name: Build Application
+        run: |
+          docker login quay.io --username=atshinde --password ${{ secrets.PASSWORD }}
+          s2i build https://github.com/atharva-shinde/matrices https://quay.io/atshinde/matrix-builder-image matrices
+          docker push quay.io/atshinde/matrix-image
       - name: Create release
         id: create_release
         env:
