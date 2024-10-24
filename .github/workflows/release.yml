@@ -24,7 +24,7 @@ jobs:
           sudo mv s2i /usr/local/bin
       - name: Set binary absolute path
         run: |
-          binary_path=$(pwd)/avg
+          binary_path=$(pwd)/dummy
           echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
       - name: Verify S2I Binary
         run: |
