@@ -25,9 +25,9 @@ jobs:
           s2i version
       - name: Build Application
         run: |
-          docker login quay.io --username=atshinde --password ${{ secrets.PASSWORD }}
-          s2i build https://github.com/atharva-shinde/matrices https://quay.io/repository/atshinde/matrix-builder-image matrices
-          docker push quay.io/atshinde/matrix-image
+          @sudo docker login quay.io --username=atshinde --password ${{ secrets.PASSWORD }}
+          @sudo s2i build https://github.com/atharva-shinde/matrices https://quay.io/repository/atshinde/matrix-builder-image matrices
+          sudo docker push quay.io/atshinde/matricies
       - name: Create release
         id: create_release
         env:
