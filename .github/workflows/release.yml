@@ -11,13 +11,16 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Generate changelog
+        run: |
+          make changelog
+          cat changelog.md
       - name: Create release
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
-          make changelog
           gh release create dummy-${{ github.ref_name }}-x86_64 \
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
