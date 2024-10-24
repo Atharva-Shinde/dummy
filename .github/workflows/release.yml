@@ -11,6 +11,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Generate changelog
+        run: |
+          make changelog
+          cat changelog.md
       - name: S2I Binary Installation
         run: |
           wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
@@ -19,27 +23,21 @@ jobs:
       - name: Verify S2I Binary
         run: |
           s2i version
-      - name: Build Application
+      # - name: Build Application
+      #   run: |
+      #     docker login quay.io --username=atshinde --password ${{ secrets.PASSWORD }}
+      #     s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image matrices
+      #     docker push quay.io/atshinde/matrix-image
+      - name: Create release
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
         run: |
-          docker login quay.io --username=atshinde --password ${{ secrets.PASSWORD }}
-          s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image matrices
-          docker push quay.io/atshinde/matrix-image
-      
-
-      # - name: Generate changelog
-      #   run: |
-      #     make changelog
-      #     cat changelog.md
-      # - name: Create release
-      #   id: create_release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     tag: ${{ github.ref_name }}
-      #   run: |
-      #     gh release create dummy-${{ github.ref_name }}-x86_64 \
-      #         --repo="$GITHUB_REPOSITORY" \
-      #         --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
-      #         --notes-file changelog.md
+          gh release create dummy-${{ github.ref_name }}-x86_64 \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --notes-file changelog.md
       # - name: Upload Artifact
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
