@@ -11,23 +11,33 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Generate changelog
+      - name: S2I Binary Installation
         run: |
-          make changelog
-          cat changelog.md
-      - name: Create release
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
+          wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
+          tar -xvf source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
+          sudo mv s2i /usr/local/bin
+      - name: Verify S2I Binary
         run: |
-          gh release create dummy-${{ github.ref_name }}-x86_64 \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
-              --notes-file changelog.md
-      - name: Upload Artifact
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          gh release upload dummy-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
+          s2i version          
+
+
+      # - name: Generate changelog
+      #   run: |
+      #     make changelog
+      #     cat changelog.md
+      # - name: Create release
+      #   id: create_release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: ${{ github.ref_name }}
+      #   run: |
+      #     gh release create dummy-${{ github.ref_name }}-x86_64 \
+      #         --repo="$GITHUB_REPOSITORY" \
+      #         --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+      #         --notes-file changelog.md
+      # - name: Upload Artifact
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: ${{ github.ref_name }}
+      #   run: |
+      #     gh release upload dummy-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
