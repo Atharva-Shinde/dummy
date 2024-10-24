@@ -11,10 +11,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      # - name: Generate changelog
-      #   run: |
-      #     make changelog
-      #     cat changelog.md
+      - name: Generate changelog
+        run: |
+          make changelog
+          cat changelog.md
       - name: S2I Binary Installation
         run: |
           wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
