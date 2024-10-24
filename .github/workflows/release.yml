@@ -16,6 +16,7 @@ jobs:
       - name: Generate changelog
         run: |
           make changelog > changelog
+          cat ./changelog
       - name: Create release
         id: create_release
         env:
