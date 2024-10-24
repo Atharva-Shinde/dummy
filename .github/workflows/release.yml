@@ -1,4 +1,4 @@
-name: Build and release Avg
+name: Release Dummy
 on:
   workflow_dispatch:
   push:
