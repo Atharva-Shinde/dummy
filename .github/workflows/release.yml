@@ -22,6 +22,10 @@ jobs:
           wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
           tar -xvf source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
           sudo mv s2i /usr/local/bin
+      - name: Set binary absolute path
+        run: |
+          binary_path=$(pwd)/avg
+          echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
       - name: Verify S2I Binary
         run: |
           s2i version
