@@ -11,23 +11,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: S2I Binary Installation and Verification
+      - name: S2I Binary Installation
         run: |
           wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
           tar -xvf source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
           sudo mv s2i /usr/local/bin
-          s2i version
-      - name: Create release
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
+      - name: Verify S2I Binary
         run: |
-          make changelog
-          gh release create dummy-${{ github.ref_name }}-x86_64 \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
-              --notes-file changelog.md
+          s2i version
+      - name: Build Application
+        run: |
+          s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image matrices
+          docker push quay.io/atshinde/matrix-image
+      
+
       # - name: Generate changelog
       #   run: |
       #     make changelog
