@@ -71,7 +71,7 @@ jobs:
         run: |
           RELEASE_TAG=$(git describe --abbrev=0 2>/dev/null)
           if [ -z "${RELEASE_TAG}" ]; then echo "RELEASE_TAG is not set, exiting"; exit 1; fi
-          gh release create ${RELEASE_TAG} \
+          gh release create ${tag} \
           --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
           --repo="https://github.com/atharva-shinde/matrices" \
           --notes-file changelog.md
