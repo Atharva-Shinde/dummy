@@ -7,25 +7,6 @@ on:
     paths: 
       - 'CHANGELOG/*.md'
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-  #       with:
-  #         fetch-depth: 0
-  #         repository: 'https://github.com/atharva-shinde/matrices'
-  #     - name: Build Application
-  #       run: |
-  #         wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
-  #         tar -xvf source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
-  #         sudo mv s2i /usr/local/bin
-  #         sudo docker login quay.io -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
-  #         sudo s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image quay.io/atshinde/matricies
-  #         sudo docker push quay.io/atshinde/matricies
-  #     - name: Deploy Application
-  #       run: |
-          
   release:
       runs-on: ubuntu-latest
       permissions:

@@ -1,0 +1,45 @@
+name: Deploy
+on:
+    workflow_dispatch: 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+            fetch-depth: 0
+            repository: 'https://github.com/atharva-shinde/matrices'
+      - name: Build the environment
+        run: |
+          wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
+          tar -xvf source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
+          sudo mv s2i /usr/local/bin
+          sudo docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p ${{ secrets.QUAY_PASSWORD }}
+      - name: Build the Application
+        run: |
+          sudo s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image quay.io/atshinde/matricies
+          sudo docker push quay.io/atshinde/matricies
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authentication
+        uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_USER: kube-admin
+          OPENSHIFT_NAMESPACE: play
+        with:
+            openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+            openshift_username: ${{ env.OPENSHIFT_USER }}
+            openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
+            insecure_skip_tls_verify: false
+            namespace: ${{ env.OPENSHIFT_NAMESPACE }}
+      - name: Deploy application
+        run: |
+            steps:
+            - name: Create and expose app
+            uses: redhat-actions/oc-new-app@v1
+            with:
+                app_name: matrices
+                image: quay.io/atshinde/matrices:latest
+                namespace: play
