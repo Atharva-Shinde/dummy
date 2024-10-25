@@ -47,5 +47,5 @@ jobs:
             else
                 oc new-app quay.io/rh-ee-atshinde/matrices --name=matrices --labels=app=matrices,env=dev
                 oc expose svc matrices --labels=matrices
-                oc get routes -l app=
+                oc get routes -l app=matrices
             fi
