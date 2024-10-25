@@ -8,15 +8,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+            github-server-url: 'https://github.com/atharva-shinde/matrices'
             fetch-depth: 0
-            repository: 'https://github.com/atharva-shinde/matrices'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+            go-version: '1.22'  
       - name: Build the environment
         run: |
           wget https://github.com/openshift/source-to-image/releases/download/v1.4.0/source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
           tar -xvf source-to-image-v1.4.0-d3544c7e-linux-386.tar.gz
           sudo mv s2i /usr/local/bin
           sudo docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p ${{ secrets.QUAY_PASSWORD }}
-      - name: Build the Application
+      - name: Build and Deploy the application on quay.io
         run: |
           sudo s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image quay.io/atshinde/matricies
           sudo docker push quay.io/atshinde/matricies
@@ -26,20 +30,20 @@ jobs:
       - name: Authentication
         uses: redhat-actions/oc-login@v1
         env:
-          OPENSHIFT_USER: kube-admin
-          OPENSHIFT_NAMESPACE: play
+          OPENSHIFT_USER: rh-ee-kmemane
+          OPENSHIFT_NAMESPACE: rh-ee-kmemane-dev
         with:
             openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
             openshift_username: ${{ env.OPENSHIFT_USER }}
-            openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
+            openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
             insecure_skip_tls_verify: false
             namespace: ${{ env.OPENSHIFT_NAMESPACE }}
       - name: Deploy application
         run: |
-            steps:
-            - name: Create and expose app
-            uses: redhat-actions/oc-new-app@v1
-            with:
-                app_name: matrices
-                image: quay.io/atshinde/matrices:latest
-                namespace: play
+            if oc get svc -l app=matrices --ignore-not-found; then
+                oc delete svc,deployment,route,imagestream --selector app=matrices
+                echo "deleted all resources with label app=matrices";
+            else
+                oc new-app quay.io/rh-ee-atshinde/matrices --name=matrices --labels=app=matrices,env=dev
+                oc expose svc matrices --labels=matrices
+            fi
