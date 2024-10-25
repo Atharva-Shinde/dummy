@@ -23,7 +23,7 @@ jobs:
       - name: Build and Deploy the application on quay.io
         run: |
           sudo s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image quay.io/atshinde/matrices
-          sudo docker push quay.io/atshinde/matricies
+          sudo docker push quay.io/atshinde/matrices
   deploy:
     runs-on: ubuntu-latest
     needs: build
