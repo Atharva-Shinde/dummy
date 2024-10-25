@@ -22,7 +22,7 @@ jobs:
           sudo docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p ${{ secrets.QUAY_PASSWORD }}
       - name: Build and Deploy the application on quay.io
         run: |
-          sudo s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image quay.io/atshinde/matricies
+          sudo s2i build https://github.com/atharva-shinde/matrices quay.io/atshinde/matrix-builder-image quay.io/atshinde/matrices
           sudo docker push quay.io/atshinde/matricies
   deploy:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
                 oc delete svc,deployment,route,imagestream --selector app=matrices
                 echo "deleted all resources with label app=matrices";
             fi
-                oc new-app quay.io/rh-ee-kmemane/matrices --name=matrices --labels=app=matrices,env=dev
-                oc expose svc matrices --labels=matrices
-                oc get routes -l app=matrices
+            oc new-app --image=quay.io/rh-ee-atshinde/matrices --name=matrices --labels=app=matrices,env=dev
+            oc expose svc matrices --labels=matrices
+            oc get routes -l app=matrices
 
