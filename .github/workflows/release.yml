@@ -31,6 +31,10 @@ jobs:
       permissions:
         contents: write
       steps:  
+        - name: Checkout code
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+          with:
+            fetch-depth: 0
         - name: Check if tag already exists
           run: |
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
@@ -59,10 +63,6 @@ jobs:
               #creating a release branch
               git checkout -b "$RELEASE_VERSION"
               git push origin "$RELEASE_VERSION"
-        - name: Checkout code
-          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-          with:
-            fetch-depth: 0
         - name: Generate Release Artifacts
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
