@@ -60,6 +60,10 @@ jobs:
         #       #creating a release branch
         #       git checkout -b "$RELEASE_VERSION"
         #       git push origin "$RELEASE_VERSION"
-        - name: Generate Release Artifacts
-          run: |
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Generate Release Artifacts
+        run: |
             make release
