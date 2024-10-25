@@ -20,7 +20,7 @@ jobs:
           run: |
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
             export RELEASE_VERSION= $LATEST_CHANGELOG_FILENAME | grep -o -E "v[0-9].[0-9].[0-9]-(alpha|beta|ga)" | awk '{print tolower($0)}'
-            if !git tag -l $RELEASE_VERSION ; then
+            if [ ! $(git tag -l $RELEASE_VERSION) ]; then
               echo "$RELEASE_VERSION tag already exists, exiting"
             else
               git config user.name "${GITHUB_ACTOR}"
