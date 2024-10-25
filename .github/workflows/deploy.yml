@@ -26,6 +26,7 @@ jobs:
           sudo docker push quay.io/atshinde/matricies
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Authentication
         uses: redhat-actions/oc-login@v1
@@ -46,4 +47,5 @@ jobs:
             else
                 oc new-app quay.io/rh-ee-atshinde/matrices --name=matrices --labels=app=matrices,env=dev
                 oc expose svc matrices --labels=matrices
+                oc get routes -l app=
             fi
