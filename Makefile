@@ -2,10 +2,7 @@ RELEASE_TAG ?= $(git describe --abbrev=0 2>/dev/null) # picks up the latest tag 
 
 .PHONY: release
 release:
-	@if [ -z "${RELEASE_TAG}"] ; then 
-    	echo "RELEASE_TAG is not set, exiting"
-    	exit 1
-	fi
+	@if [ -z "${RELEASE_TAG}" ]; then echo "RELEASE_TAG is not set, exiting"; exit 1; fi
 
 	@if ! [ -z "$$(git status --porcelain)" ]; then echo "Your local git repository contains uncommitted changes, use git clean before proceeding."; exit 1; fi
 
