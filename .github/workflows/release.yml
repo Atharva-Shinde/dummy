@@ -67,6 +67,7 @@ jobs:
       - name: Generate Release Artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
         run: |
           RELEASE_TAG=$(git describe --abbrev=0 2>/dev/null)
           if [ -z "${RELEASE_TAG}" ]; then echo "RELEASE_TAG is not set, exiting"; exit 1; fi
