@@ -1,0 +1,17 @@
+# Changelog\n
+## [v2.0.0] - 25-10-2024
+
+### Added
+
+718fea2 - Add GitHub Action for release builds (Atharva Shinde)
+
+### Fixed
+
+1622f57 - fixed README (Atharva Shinde)
+
+### Minor Changes
+
+fd54b4b - Minor changes in script (Atharva Shinde)
+1e432a3 - Rename Release (Atharva Shinde)
+a966b77 - README minor changes (Atharva Shinde)
+84f77cd - Minor changes (Atharva Shinde)
