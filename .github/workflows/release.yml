@@ -70,5 +70,5 @@ jobs:
             gh release create ${RELEASE_TAG} \
             --title="${GITHUB_REPOSITORY#*/}" \
             --repo="https://github.com/atharva-shinde/dummy" \
-            --notes-file v3.0.7.md
+            --notes-file v3.0.8.md
             gh release upload avg-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
