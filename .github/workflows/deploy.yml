@@ -31,8 +31,8 @@ jobs:
       - name: Authentication
         uses: redhat-actions/oc-login@v1
         env:
-          OPENSHIFT_USER: rh-ee-kmemane
-          OPENSHIFT_NAMESPACE: rh-ee-kmemane-dev
+          OPENSHIFT_USER: rh-ee-atshinde
+          OPENSHIFT_NAMESPACE: rh-ee-atshinde-dev
         with:
             openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
             openshift_username: ${{ env.OPENSHIFT_USER }}
