@@ -68,13 +68,10 @@ jobs:
             --title="${GITHUB_REPOSITORY#*/}" \
             --repo="https://github.com/atharva-shinde/dummy" \
             --notes-file v3.1.1.md
-        - name: Set binary absolute path and environment variables
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            tag: ${{ github.ref_name }}
+        - name: Set binary path and environment variables
           run: |
-            binary_path=$(pwd)/main
-            echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
+            BINARY_PATH=$(pwd)/main
+            echo "BIN_PATH=${BINARY_PATH}" >> $GITHUB_ENV
         - name: Generate Artifacts
           run: |
             gh release upload dummy-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
