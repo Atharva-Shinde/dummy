@@ -21,6 +21,7 @@ jobs:
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
             echo "Latest changelog file: $LATEST_CHANGELOG_FILENAME"
             RELEASE_VERSION="$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*"
+            echo "Trrrrrrrrrrrrrrrrrrrr: $LATEST_CHANGELOG_FILENAME"
             if [[ -z "$RELEASE_VERSION" ]] ; then 
                 echo "Specify correct release version file name" ;
             else
@@ -28,7 +29,7 @@ jobs:
               export $RELEASE_VERSION
             fi
             if git tag -l | grep -qwE "$RELEASE_VERSION" ; then
-              echo "$RELEASE_VERSION tag already exists"
+              echo "$RELEASE_VERSION tag already exists" ;
               exit 1
             fi
             git config user.name "${GITHUB_ACTOR}"
