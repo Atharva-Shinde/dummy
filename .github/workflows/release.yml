@@ -75,11 +75,11 @@ jobs:
     steps:
       - name: Set binary absolute path and environment variables
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           tag: ${{ github.ref_name }}
         run: |
           binary_path=$(pwd)
           echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
       - name: Generate Artifacts
         run: |
-          gh release upload avg-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
+          gh release upload dummy-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
