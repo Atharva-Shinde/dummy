@@ -41,13 +41,19 @@ jobs:
             RELEASE_VERSION: $RELEASE_VERSION
         - name: Release Branch
           run: |
-            if $RELEASE_VERSION | grep -o (alpha|beta|ga) ; then
+            echo "This is the release version $RELEASE_VERSION"
+            if $RELEASE_VERSION | grep -o "(alpha|beta|ga)" ; then
+              if git show-ref "refs/remotes/origin/$RELEASE_VERSION" --verify --quiet ; then
+                echo "$RELEASE_VERSION branch already exists, exiting"
+                exit 1
+              fi
               # merge into main
               git checkout -b main
-            elif $RELEASE_VERSION | grep -o (alpha|beta|ga) && git show-ref "refs/remotes/origin/$RELEASE_VERSION" --verify --quiet ; then
-              echo "$RELEASE_VERSION branch already exists, exiting"
-              exit 1
-            elif
+            else
+              if git show-ref "refs/remotes/origin/$RELEASE_VERSION" --verify --quiet ; then
+                echo "$RELEASE_VERSION branch already exists, exiting"
+                exit 1
+              fi
               #creating a release branch
               git checkout -b "$RELEASE_VERSION"
               git push origin "$RELEASE_VERSION"
