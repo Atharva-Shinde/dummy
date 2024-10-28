@@ -16,7 +16,7 @@ jobs:
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
           with:
             fetch-depth: 0
-        - name: Check if tag already exists
+        - name: Creating Release Tag
           run: |
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
             echo "Latest changelog file: $LATEST_CHANGELOG_FILENAME"
@@ -35,7 +35,6 @@ jobs:
             git tag -a ${RELEASE_VERSION} -m "Adding ${RELEASE_VERSION}"
             git push origin tag ${RELEASE_VERSION} 
             echo "Created tag $RELEASE_VERSION"
-
         - name: Set env
           run: echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
           env:
