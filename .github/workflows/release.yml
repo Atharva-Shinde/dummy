@@ -53,8 +53,8 @@ jobs:
                 exit 1
               fi
               #creating a release branch
-              git checkout -b "$RELEASE_VERSION"
-              git push origin "$RELEASE_VERSION"
+              git checkout -b "release-$RELEASE_VERSION"
+              git push origin "release-$RELEASE_VERSION"
             fi
         - name: Generate Release Artifacts
           env:
