@@ -19,9 +19,9 @@ jobs:
         - name: Check if tag already exists
           run: |
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
-            export RELEASE_VERSION= $LATEST_CHANGELOG_FILENAME | grep -o -E "v[0-9].[0-9].[0-9]-(alpha|beta|ga)" | awk '{print tolower($0)}'
-            if  git tag -l | grep "$RELEASE_VERSION" ; then
-              echo "$RELEASE_VERSION tag already exists, exiting"
+            export RELEASE_VERSION= $LATEST_CHANGELOG_FILENAME | grep -o -E "v[0-9].[0-9].[0-9](-(alpha|beta|ga))*" | awk '{print tolower($0)}'
+            if git tag -l | grep -qwE "$RELEASE_VERSION" ; then
+              echo "$RELEASE_VERSION tag already exists"
             else
               git config user.name "${GITHUB_ACTOR}"
               git tag -a ${RELEASE_VERSION} -m "Adding ${RELEASE_VERSION}"
