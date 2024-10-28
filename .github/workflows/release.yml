@@ -67,14 +67,14 @@ jobs:
             gh release create ${RELEASE_TAG} \
             --title="${GITHUB_REPOSITORY#*/}" \
             --repo="https://github.com/atharva-shinde/dummy" \
-            --notes-file v2.0.4.md
-        - name: Set binary absolute path and environment variables
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            tag: ${{ github.ref_name }}
+            --notes-file v2.0.5.md
+        - name: Set binary absolute path
           run: |
             binary_path=$(pwd)/main
             echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
-        - name: Generate Artifacts
+        - name: Upload Artifact
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref_name }}
           run: |
             gh release upload ${RELEASE_TAG} ${{ env.BIN_PATH }} --clobber
