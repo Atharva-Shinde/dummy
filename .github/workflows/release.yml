@@ -63,6 +63,7 @@ jobs:
             tag: ${{ github.ref_name }}
           run: |
             RELEASE_TAG=$(git describe --abbrev=0 2>/dev/null)
+            export RELEASE_TAG=$RELEASE_TAG
             if [ -z "${RELEASE_TAG}" ]; then echo "RELEASE_TAG is not set, exiting"; exit 1; fi
             gh release create ${RELEASE_TAG} \
             --title="${GITHUB_REPOSITORY#*/}" \
@@ -70,7 +71,7 @@ jobs:
             --notes-file v2.0.5.md
         - name: Set binary absolute path
           run: |
-            binary_path=$(pwd)/main
+            binary_path=./main
             echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
         - name: Upload Artifact
           env:
@@ -78,3 +79,4 @@ jobs:
             tag: ${{ github.ref_name }}
           run: |
             gh release upload ${RELEASE_TAG} ${{ env.BIN_PATH }} --clobber
+            gh release upload area-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
