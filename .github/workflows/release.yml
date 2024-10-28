@@ -55,6 +55,7 @@ jobs:
               #creating a release branch
               git checkout -b "$RELEASE_VERSION"
               git push origin "$RELEASE_VERSION"
+            fi
         - name: Generate Release Artifacts
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
