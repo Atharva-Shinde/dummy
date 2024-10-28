@@ -32,6 +32,7 @@ jobs:
               exit 1
             fi
             git config user.name "${GITHUB_ACTOR}"
+            git config user.email "${GITHUB_ACTOR}@no-reply.com"
             git tag -a ${RELEASE_VERSION} -m "Adding ${RELEASE_VERSION}"
             git push origin tag ${RELEASE_VERSION} 
             echo "Created tag $RELEASE_VERSION"
