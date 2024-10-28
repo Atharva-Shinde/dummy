@@ -75,7 +75,7 @@ jobs:
             gh release create ${RELEASE_TAG} \
             --title="${GITHUB_REPOSITORY#*/}" \
             --repo="https://github.com/atharva-shinde/dummy" \
-            --notes-file v4.0.2.md
+            --notes-file v4.0.3.md
             
             echo "Release tag ${RELEASE_TAG}"
             gh release upload ${RELEASE_TAG} ${{ env.BIN_PATH }} --clobber
