@@ -11,6 +11,8 @@
 
 ### Minor Changes
 
+test
+
 fd54b4b - Minor changes in script (Atharva Shinde)
 1e432a3 - Rename Release (Atharva Shinde)
 a966b77 - README minor changes (Atharva Shinde)
