@@ -56,6 +56,10 @@ jobs:
               git checkout -b "release-$RELEASE_VERSION"
               git push origin "release-$RELEASE_VERSION"
             fi
+        - name: Set binary absolute path
+          run: |
+            binary_path=$(pwd)/main
+            echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
         - name: Build Release and Generate Release Artifacts
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
