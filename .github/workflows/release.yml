@@ -25,7 +25,7 @@ jobs:
                 echo "Specify correct release version file name" ;
             else
               echo $RELEASE_VERSION
-              export $RELEASE_VERSION
+              export RELEASE_VERSION=$RELEASE_VERSION
             fi
             if git tag -l | grep -qwE "$RELEASE_VERSION" ; then
               echo "$RELEASE_VERSION tag already exists" ;
