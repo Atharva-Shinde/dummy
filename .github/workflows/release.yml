@@ -19,15 +19,24 @@ jobs:
         - name: Check if tag already exists
           run: |
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
-            export RELEASE_VERSION=$LATEST_CHANGELOG_FILENAME | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*"
-            if git tag -l | grep -qwE "$RELEASE_VERSION" ; then
+            echo "Latest changelog file: $LATEST_CHANGELOG_FILENAME"
+
+            RELEASE_VERSION=$(echo "$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]+\.[0-9]+\.[0-9]+(-(alpha|beta|ga))*")
+
+            if [ -z "$RELEASE_VERSION" ]; then
+              echo "No valid release version found in the latest changelog filename."
+              exit 1
+            fi
+
+            if git tag -l | grep -qwE "$RELEASE_VERSION"; then
               echo "$RELEASE_VERSION tag already exists"
             else
               git config user.name "${GITHUB_ACTOR}"
-              git tag -a ${RELEASE_VERSION} -m "Adding ${RELEASE_VERSION}"
-              git push origin tag ${RELEASE_VERSION} 
+              git tag -a "$RELEASE_VERSION" -m "Adding $RELEASE_VERSION"
+              git push origin "$RELEASE_VERSION"
               echo "Created tag $RELEASE_VERSION"
             fi
+
         - name: Set env
           run: echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
           env:
