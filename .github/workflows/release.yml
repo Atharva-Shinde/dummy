@@ -58,7 +58,7 @@ jobs:
             fi
         - name: Set binary absolute path
           run: |
-            binary_path=$(pwd)/main
+            binary_path=$(pwd)
             echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
         - name: Build Release and Generate Release Artifacts
           env:
