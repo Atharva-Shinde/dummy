@@ -57,13 +57,24 @@ jobs:
               git checkout -b "release-$RELEASE_VERSION"
               git push origin "release-$RELEASE_VERSION"
             fi
-        - name: Set binary absolute path
-          run: |
-            binary_path=$(pwd)/main
-            echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
-        - name: Upload Artifact
+        - name: Build Release 
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             tag: ${{ github.ref_name }}
           run: |
-            gh release upload avg-${{ github.ref_name }}-x86_64 ${{ env.BIN_PATH }} --clobber
+            RELEASE_TAG=$(git describe --abbrev=0 2>/dev/null)
+            if [ -z "${RELEASE_TAG}" ]; then echo "RELEASE_TAG is not set, exiting"; exit 1; fi
+            gh release create ${RELEASE_TAG} \
+            --title="${GITHUB_REPOSITORY#*/}" \
+            --repo="https://github.com/atharva-shinde/dummy" \
+            --notes-file v2.0.4.md
+        - name: Set binary absolute path and environment variables
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref_name }}
+          run: |
+            binary_path=$(pwd)/main
+            echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
+        - name: Generate Artifacts
+          run: |
+            gh release upload ${RELEASE_TAG} ${{ env.BIN_PATH }} --clobber
