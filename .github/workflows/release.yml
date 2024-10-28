@@ -20,10 +20,11 @@ jobs:
           run: |
             LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
             echo "Latest changelog file: $LATEST_CHANGELOG_FILENAME"
-            RELEASE_VERSION=${"$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*"}
-            if [ -z $"RELEASE_VERSION" ] ; then 
-              echo "Specify correct release version file name"
+            RELEASE_VERSION="$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*"
+            if [[ -z "$RELEASE_VERSION" ]] ; then 
+                echo "Specify correct release version file name" ;
             else
+              echo $RELEASE_VERSION
               export $RELEASE_VERSION
             fi
             if git tag -l | grep -qwE "$RELEASE_VERSION" ; then
