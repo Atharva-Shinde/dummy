@@ -18,8 +18,7 @@ jobs:
             fetch-depth: 0
         - name: Creating Release Tag
           run: |
-            LATEST_CHANGELOG_FILENAME=$(git show --name-only --pretty=format: HEAD | head -n 1)
-            echo "Latest changelog file: $LATEST_CHANGELOG_FILENAME"
+            LATEST_CHANGELOG_FILENAME="CHANGELOG/$(git show --name-only --pretty=format: HEAD | head -n 1)"
             RELEASE_VERSION=$(echo "$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*")
             if [[ -z "$RELEASE_VERSION" ]] ; then 
                 echo "Specify correct release version file name" ;
