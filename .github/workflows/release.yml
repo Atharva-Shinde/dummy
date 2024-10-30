@@ -22,6 +22,7 @@ jobs:
             RELEASE_VERSION=$(echo "$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*")
             if [[ -z "$RELEASE_VERSION" ]] ; then 
                 echo "Specify correct release version file name" ;
+                exit 1
             else
               echo $RELEASE_VERSION
               export RELEASE_VERSION=$RELEASE_VERSION
