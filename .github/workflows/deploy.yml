@@ -45,7 +45,7 @@ jobs:
                 oc delete svc,deployment,route,imagestream --selector app=matrices
                 echo "deleted all resources with label app=matrices";
             fi
-            oc new-app quay.io/atshinde/matrices --name=matrices-${RELEASE-VERS} --labels=app=matrices,env=dev
+            oc new-app quay.io/atshinde/matrices --name=matrices-${RELEASE-VERSION} --labels=app=matrices,env=dev
             sleep 3
             oc expose svc matrices --labels=matrices
             oc get routes -l app=matrices
