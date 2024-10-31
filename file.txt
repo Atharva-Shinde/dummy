@@ -1,2 +1,1 @@
-Hello WorldFeature work
-Another feature work
+Hello WorldFeature workAnother feature work
