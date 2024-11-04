@@ -4,8 +4,6 @@ on:
   push: 
     branches: 
       - main
-    paths: 
-      - 'CHANGELOG/*.md'
 jobs:
   release:
       runs-on: ubuntu-latest
@@ -16,7 +14,7 @@ jobs:
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
           with:
             fetch-depth: 0
-        - name: Creating Release Tag
+        - name: Creating a new Release Tag
           run: |
             LATEST_CHANGELOG_FILENAME="CHANGELOG/$(git show --name-only --pretty=format: HEAD | head -n 1)"
             RELEASE_VERSION=$(echo "$LATEST_CHANGELOG_FILENAME" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*")
@@ -38,7 +36,7 @@ jobs:
             echo "Created tag $RELEASE_VERSION"
             echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
             echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_OUTPUT
-        - name: Release Branch
+        - name: Creating a new Release Branch
           run: |
             echo "This is the release version $RELEASE_VERSION"
             if $RELEASE_VERSION | grep -o "(alpha|beta|ga)" ; then
@@ -57,7 +55,10 @@ jobs:
               git checkout -b "release-$RELEASE_VERSION"
               git push origin "release-$RELEASE_VERSION"
             fi
-        - name: Set binary absolute path and set env
+        - name: Generate Release Notes
+          run: |
+            make changelog
+        - name: Set environment and binary absolute path
           run: |
             binary_path=./main
             echo "BIN_PATH=${binary_path}" >> $GITHUB_ENV
@@ -75,7 +76,7 @@ jobs:
             gh release create ${RELEASE_TAG} \
             --title="${GITHUB_REPOSITORY#*/}" \
             --repo="https://github.com/atharva-shinde/dummy" \
-            --notes-file v4.0.3.md
+            --notes-file CHANGELOG/${RELEASE_TAG}.md
             
             echo "Release tag ${RELEASE_TAG}"
             gh release upload ${RELEASE_TAG} ${{ env.BIN_PATH }} --clobber
