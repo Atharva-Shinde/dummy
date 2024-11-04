@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-	// This is comment B
 	result := fib()
 	for i := 0; i < 10; i++ {
 		fmt.Print(strconv.Itoa(result()) + " ")
@@ -15,7 +14,6 @@ func main() {
 
 }
 func fib() func() int {
-	// This is comment B
 	first, second := 0, 1
 	return func() int {
 		ret := first
