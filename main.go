@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	// This is comment B
+	// This is comment lk
 	result := fib()
 	for i := 0; i < 10; i++ {
 		fmt.Print(strconv.Itoa(result()) + " ")
