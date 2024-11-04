@@ -16,7 +16,7 @@ jobs:
             fetch-depth: 0
         - name: Creating a new Release Tag
           run: |
-            RELEASE_ISSUE_TITLE=${{ github.event.issue.title }}
+            RELEASE_ISSUE_TITLE="${{ github.event.issue.title }}"
             RELEASE_VERSION=$(echo "$RELEASE_ISSUE_TITLE" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*")
             if [[ -z "$RELEASE_VERSION" ]] ; then 
                 echo "Not a release issue, exiting" ;
