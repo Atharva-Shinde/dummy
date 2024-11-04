@@ -15,7 +15,7 @@ func main() {
 
 }
 func fib() func() int {
-	// This is commit C
+	// This is comment B
 	first, second := 0, 1
 	return func() int {
 		ret := first
