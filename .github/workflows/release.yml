@@ -20,14 +20,14 @@ jobs:
             RELEASE_VERSION=$(echo "$RELEASE_ISSUE_TITLE" | grep -o -E "v[0-9]\.[0-9]\.[0-9](-(alpha|beta|ga))*")
             if [[ -z "$RELEASE_VERSION" ]] ; then 
                 echo "Not a release issue, exiting" ;
-                exit 1
+                exit 1 ;
             else
               echo $RELEASE_VERSION
               export RELEASE_VERSION=$RELEASE_VERSION
             fi
             if git tag -l | grep -qwE "$RELEASE_VERSION" ; then
               echo "$RELEASE_VERSION tag already exists" ;
-              exit 1
+              exit 1 ;
             fi
             git config user.name "${GITHUB_ACTOR}"
             git config user.email "${GITHUB_ACTOR}@no-reply.com"
@@ -41,15 +41,14 @@ jobs:
             echo "This is the release version $RELEASE_VERSION"
             if $RELEASE_VERSION | grep -o "(alpha|beta|ga)" ; then
               if git show-ref "refs/remotes/origin/$RELEASE_VERSION" --verify --quiet ; then
-                echo "$RELEASE_VERSION branch already exists, exiting"
-                exit 1
+                echo "$RELEASE_VERSION branch already exists, exiting" ;
+                exit 1 ;
               fi
-              # merge into main
               git checkout -b main
             else
               if git show-ref "refs/remotes/origin/$RELEASE_VERSION" --verify --quiet ; then
-                echo "$RELEASE_VERSION branch already exists, exiting"
-                exit 1
+                echo "$RELEASE_VERSION branch already exists, exiting" ;
+                exit 1 ;
               fi
               #creating a release branch
               git checkout -b "release-$RELEASE_VERSION"
@@ -72,11 +71,12 @@ jobs:
           run: |
             RELEASE_TAG=$(git describe --abbrev=0 2>/dev/null)
             export RELEASE_TAG=$RELEASE_TAG
-            if [ -z "${RELEASE_TAG}" ]; then echo "RELEASE_TAG is not set, exiting"; exit 1; fi
+            if [ -z "${RELEASE_TAG}" ]; then 
+              echo "${RELEASE_TAG} is not set, exiting"; 
+              exit 1;
+            fi
             gh release create ${RELEASE_TAG} \
             --title="${GITHUB_REPOSITORY#*/}" \
             --repo="https://github.com/atharva-shinde/dummy" \
             --notes-file CHANGELOG/${RELEASE_TAG}.md
-            
-            echo "Release tag ${RELEASE_TAG}"
             gh release upload ${RELEASE_TAG} ${{ env.BIN_PATH }} --clobber
